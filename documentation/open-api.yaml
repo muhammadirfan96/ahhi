@@ -1,0 +1,492 @@
+openapi: 3.0.3
+info:
+  title: RESTFUL API TOKO FAHAD STAR - OpenAPI 3.0
+  description: |-
+    - deskrips di sini
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: MUHAMMADIRFANIRFANI808@GMAIL.COM
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+servers:
+  - url: http://localhost:5000/mydomain/fahad-star/v1
+tags:
+  - name: product
+    description: Product CRUD
+  - name: user
+    description: Operations about user
+paths:
+  /product:
+    post:
+      tags:
+        - product
+      summary: create a new product
+      description: |
+        - validasi:
+          - name:
+            - required
+          - price:
+            - required
+          - createdBy:
+            - valid user id
+          - updatedBy:
+            - valid user id
+      requestBody:
+        content:
+          application/json:
+            example:
+              "name": "produk 1"
+              "price": 20000
+              "createdBy": 2
+              "updatedBy": 2
+              "createdAt": "2023-08-20"
+              "updatedAt": "2023-08-20"
+      responses:
+        '201':
+          $ref: '#/components/responses/Created'
+        '400':
+          $ref: '#/components/responses/InvalidUrl'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '405':
+          $ref: '#/components/responses/InvalidInput'
+      security:
+        - bearerAuth: []
+        
+    get:
+      summary: select multiple product
+      description: |
+        - filter data pencarian menggunakan query parameter
+        - untuk field price menggunakan range 
+        - untuk field name menggunakan kemiripan kata
+      tags:
+        - product
+      parameters:
+        - in: query
+          name: name
+          schema:
+            type: string
+            default: ""
+        - in: query
+          name: price
+          schema:
+            type: string
+            default: 0-999999999999
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            default: 20
+        - in: query
+          name: page
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                result:
+                  total_data: 2
+                  total_page: 1
+                  crr_page: 1
+                  data:
+                    - id: 1
+                      name: "Product A"
+                      price: 20000
+                      createdBy: 2
+                      updatedBy: 2
+                      createdAt: 2023-06-22
+                      updateddAt: 2023-06-22
+                    - id: 2
+                      name: "Product B"
+                      price: 19000
+                      createdBy: 2
+                      updatedBy: 2
+                      createdAt: 2023-06-22
+                      updateddAt: 2023-06-22
+        '400':
+          $ref: '#/components/responses/InvalidUrl'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+      security:
+        - bearerAuth: []
+        
+  /product/{productId}:
+    get:
+      tags:
+        - product
+      summary: Get crr product
+      parameters:
+        - in: path
+          name: productId
+          schema:
+            type: integer
+            format: int64
+            example: 1
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                result:
+                  id: 2
+                  name: "Product B"
+                  price: 19000
+                  createdBy: 2
+                  updatedBy: 2
+                  createdAt: 2023-06-22
+                  updateddAt: 2023-06-22
+        '400':
+          $ref: '#/components/responses/InvalidUrl'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      security:
+        - bearerAuth: []
+        
+    patch:
+      tags:
+        - product
+      summary: Update crr product
+      parameters:
+        - in: path 
+          name: productId
+          schema:
+            type: integer
+            format: int64
+            example: 1
+          required: true
+      requestBody:
+        required: true 
+        content:
+          application/json:
+            example:
+              "name": "produk 1"
+              "price": 20000
+              "createdBy": 2
+              "updatedBy": 2
+              "createdAt": "2023-08-20"
+              "updatedAt": "2023-08-20"
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '400':
+          $ref: '#/components/responses/InvalidUrl'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '405':
+          $ref: '#/components/responses/InvalidInput'
+      security:
+        - bearerAuth: []
+        
+    delete:
+      tags:
+        - product
+      parameters:
+        - in: path 
+          name: productId
+          schema:
+            type: integer
+            format: int64
+            example: 1
+          required: true
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '400':
+          $ref: '#/components/responses/InvalidUrl'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      security:
+        - bearerAuth: []
+        
+  /users:
+    get:
+      tags:
+        - user
+      summary: select multi user
+      parameters:
+        - in: query
+          name: email
+          schema:
+            type: string
+            default: ""
+        - in: query
+          name: phone
+          schema:
+            type: string
+            default: ""
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            default: 20
+        - in: query
+          name: page
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                result:
+                  total_data: 2
+                  total_page: 1
+                  crr_page: 1
+                  data: 
+                    - id: 1
+                      email: "muhammadirfan187@outlook.com"
+                      phone: "082302173682"
+                      role: admin
+                    - id: 2
+                      email: "jamilanatsir@gmail.com"
+                      phone: "082302173682"
+                      role: user
+        '400':
+          $ref: '#/components/responses/InvalidUrl'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+      security:
+        - bearerAuth: []
+
+  /user/{userId}:
+    delete:
+      tags:
+        - user
+      parameters:
+        - in: path 
+          name: userId
+          schema:
+            type: integer
+            format: int64
+            example: 1
+          required: true
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '400':
+          $ref: '#/components/responses/InvalidUrl'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      security:
+        - bearerAuth: []
+      
+  /user/register:
+    post:
+      tags:
+        - user
+      summary: register new user
+      description: |
+        - validasi:
+          - email:
+            - valid email
+            - belum terdaftar
+          - password:
+            - minimal 6 karakter
+          - confPassword
+            - harus sama dengan password
+        - buat 20 random string
+        - untuk data yang di insert, field activationToken menggunakan 20 random string ini 
+        - kirim juga 20 random string ini ke email user sebagai kode aktivasi
+      requestBody:
+        content:
+          application/json:
+            example:
+              "email": "muhammadirfanirfani808@gmail.com"
+              "password": "123456" 
+              "confPassword": "123456"
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '400':
+          $ref: '#/components/responses/InvalidUrl'
+        '405':
+          $ref: '#/components/responses/InvalidInput'
+        
+  /user/activateUser:
+    patch:
+      tags:
+        - user
+      summary: activation user
+      description: |
+        - validasi:
+          - email:
+            - sudah terdaftar
+          - activation-token: 
+            - match dengan user.activationToken
+        - pilih current data user berdasarkkan email
+        - update user: 
+          - field active nya menjadi 1
+          - field activationToken nya menjadi null
+      requestBody:
+        content:
+          application/json:
+            example:
+              "email": "email@email.com"
+              "activation-token": "jihugytfrd4e3w5r7y8i"
+      responses:
+        '200':
+          $ref: "#/components/responses/Success"
+        '400':
+          $ref: '#/components/responses/InvalidUrl'
+        '405':
+          $ref: '#/components/responses/InvalidInput'
+  /user/login:
+    post:
+      tags:
+        - user
+      summary: login to get accessToken
+      description: | 
+        - validation:
+          - email: 
+            - sudah terdaftar
+          - password: 
+            - match dengan password nya email
+      requestBody:
+        content: 
+          application/json:
+            example:
+              "email": "email@email.com"
+              "password": "123456"
+      responses:
+        '200':
+          description: success
+          content: 
+            application/json: 
+              example:
+                result: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVtYWlsQGVtYWlsLmNvbSIsImlhdCI6MTUxNjIzOTAyMn0.UOQFRvx2JwT1PcDKqbfj9f_WN66Gs_giUMGv3bgVcE8
+        '400':
+          $ref: '#/components/responses/InvalidUrl'
+        '405':
+          $ref: '#/components/responses/InvalidInput'
+  
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: "produk 1"
+        price:
+          type: integer
+          format: int32
+          example: 20000
+        createdBy:
+          type: integer
+          format: int64
+          example: 2
+        updatedBy:
+          type: integer
+          format: int64
+          example: 2
+        createdAt:
+          type: integer
+          format: date-time
+          example: 2023-08-20
+        updatedAt:
+          type: integer
+          format: date-time
+          example: 2023-08-20
+          
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        email:
+          type: string
+          example: muhammadirfanirfani808@gmail.com
+        phone:
+          type: string
+          example: '082302172682'
+        password:
+          type: string
+          example: '12345'
+        role:
+          type: string
+          example: user
+        refreshToken:
+          type: string
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVtYWlsQGVtYWlsLmNvbSIsImlhdCI6MTUxNjIzOTAyMn0.UOQFRvx2JwT1PcDKqbfj9f_WN66Gs_giUMGv3bgVcE8"
+        resetPasswordToken:
+          type: string
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVtYWlsQGVtYWlsLmNvbSIsImlhdCI6MTUxNjIzOTAyMn0.UOQFRvx2JwT1PcDKqbfj9f_WN66Gs_giUMGv3bgVcE8"
+        active:
+          type: integer
+          format: int32
+          example: 0
+        activationToken:
+          type: string
+          example: "huji9u8y6t4r3e2w9vd6"
+  responses:
+    Success:
+      description: success
+      content:
+        application/json:
+          example:
+            message: "success"
+    Created:
+      description: created
+      content:
+        application/json:
+          example:
+            message: "created"
+    InvalidUrl:
+      description: invali url
+      content:
+        application/json:
+          example:
+            message: "invalid url"
+    NotFound:
+      description: not found
+      content:
+        application/json:
+          example:
+            message: "not found"
+    Forbidden:
+      description: forbidden
+      content:
+        application/json:
+          example:
+            message: "forbidden"
+    InvalidInput:
+      description: invalid input
+      content:
+        application/json:
+          example:
+            message:
+              - "field a required"
+              - "field b required"
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
