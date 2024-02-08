@@ -35,10 +35,10 @@ const createProductValidation = [
 		.trim()
 		.escape()
 		.notEmpty()
-		.withMessage('title required')
+		.withMessage('name required')
 		.bail()
 		.isString()
-		.withMessage('title must string'),
+		.withMessage('name must string'),
 	body('price')
 		.trim()
 		.escape()

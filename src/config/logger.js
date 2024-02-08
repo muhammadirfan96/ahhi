@@ -2,7 +2,12 @@ import winston from 'winston';
 import 'winston-mongodb';
 import { uri } from './database.js';
 import dotenv from 'dotenv';
+import { fileURLToPath } from 'url';
+import path, { dirname } from 'path';
 dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const logger = winston.createLogger({
 	format: winston.format.combine(
@@ -19,10 +24,14 @@ const logger = winston.createLogger({
 		})
 	],
 	exceptionHandlers: [
-		new winston.transports.File({ filename: 'logs/exceptions.log' })
+		new winston.transports.File({
+			filename: path.join(__dirname, '../../logs/exceptions.log')
+		})
 	],
 	rejectionHandlers: [
-		new winston.transports.File({ filename: 'logs/rejections.log' })
+		new winston.transports.File({
+			filename: path.join(__dirname, '../../logs/rejections.log')
+		})
 	]
 });
 

@@ -5,8 +5,8 @@ const productsSchema = new mongoose.Schema(
 		name: String,
 		price: Number,
 		photo: String,
-		createdBy: Number,
-		updatedBy: Number
+		createdBy: String,
+		updatedBy: String
 	},
 	{ timestamps: true }
 );

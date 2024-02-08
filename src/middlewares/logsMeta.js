@@ -1,5 +1,4 @@
 const logsMeta = async (req, res, next) => {
-	const userId = req.me?.id;
 	const userIp = req.ip;
 	const httpRequestInfo = {
 		method: req.method,
@@ -8,7 +7,6 @@ const logsMeta = async (req, res, next) => {
 	};
 
 	req.logMeta = {
-		userId,
 		userIp,
 		httpRequestInfo
 	};

@@ -26,7 +26,7 @@ ProductsRouter.get(
 );
 ProductsRouter.get(
 	'/products',
-// 	verifyToken,
+	verifyToken,
 	findProductsValidation,
 	findProducts
 );
@@ -50,7 +50,7 @@ ProductsRouter.delete(
 );
 ProductsRouter.patch(
 	'/product/:id/photo',
-// 	verifyToken,
+	verifyToken,
 	uploadImageValidation,
 	uploadImage
 );
