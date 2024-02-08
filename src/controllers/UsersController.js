@@ -110,6 +110,9 @@ const activationUser = async (req, res, next) => {
             { _id: req.user.id },
             { $set: { active: 1, activationToken: null } }
         );
+        // hapus user dgn email yg sama, activation 0
+        await UsersModel.deleteMany({ email: req.user.email, active: 0 });
+
         // hapus cookie activationUserToken
         res.clearCookie('activationUserToken');
         res.status(200).json({ message: `${req.user.email} has activated` });

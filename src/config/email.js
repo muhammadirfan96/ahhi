@@ -9,7 +9,7 @@ process.env.NODE_ENV === 'production'
 
 let userPassword;
 process.env.NODE_ENV === 'production'
-    ? (userPassword = 'muhammadirfanirfani808@gmail.com')
+    ? (userPassword = 'wgffjcgnivuavqbj')
     : (userPassword = process.env.USER_PASSWORD);
 
 const transporter = nodemailer.createTransport({
