@@ -29,7 +29,7 @@ const findProducts = async (req, res, next) => {
         };
 
         const all_data = (await ProductsModel.find(filter)).length;
-        const data = await ProductsModel.find(filter).skip(offset).limit(limit);
+        const data = await ProductsModel.find(filter).sort({'_id': 'desc'}).skip(offset).limit(limit);
 
         const result = {
             all_data: all_data,
