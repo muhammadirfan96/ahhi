@@ -20,37 +20,37 @@ const ProductsRouter = express.Router();
 
 ProductsRouter.get(
 	'/product/:id',
-	//verifyToken,
+	verifyToken,
 	showProductValidation,
 	showProduct
 );
 ProductsRouter.get(
 	'/products',
-	//verifyToken,
+	verifyToken,
 	findProductsValidation,
 	findProducts
 );
 ProductsRouter.post(
 	'/product',
-	//verifyToken,
+	verifyToken,
 	createProductValidation,
 	createProduct
 );
 ProductsRouter.patch(
 	'/product/:id',
-	//verifyToken,
+	verifyToken,
 	updateProductValidation,
 	updateProduct
 );
 ProductsRouter.delete(
 	'/product/:id',
-	//verifyToken,
+	verifyToken,
 	deleteProductValidation,
 	deleteProduct
 );
 ProductsRouter.patch(
 	'/product/:id/photo',
-	//verifyToken,
+	verifyToken,
 	uploadImageValidation,
 	uploadImage
 );

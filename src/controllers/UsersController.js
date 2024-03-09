@@ -149,7 +149,7 @@ const login = async (req, res, next) => {
       { id: req.user.id, email: req.user.email },
       accessTokenKey,
       {
-        expiresIn: '1d'
+        expiresIn: '15s'
       }
     );
 
@@ -165,7 +165,7 @@ const refreshToken = async (req, res, next) => {
       { id: req.decode.id, email: req.decode.email },
       accessTokenKey,
       {
-        expiresIn: '1d'
+        expiresIn: '15s'
       }
     );
 

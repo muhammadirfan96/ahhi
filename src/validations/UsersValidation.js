@@ -81,7 +81,7 @@ const activationUserValidation = [
         .custom((value, { req }) => {
             const decode =
                 value && jwt.verify(value, activationUserTokenKey);
-            if (!decode) throw new Error('access forbidden');
+            if (!decode) throw new Error('cookie not found');
             req.decode = decode;
             return true;
         })
@@ -145,7 +145,7 @@ const loginValidation = [
 const refreshTokenValidation = [
     cookie('refreshToken').custom((value, { req }) => {
         const decode = value && jwt.verify(value, refreshTokenKey);
-        if (!decode) throw new Error('access forbidden');
+        if (!decode) throw new Error('cookie not found');
         req.decode = decode;
         return true;
     }),
@@ -171,7 +171,7 @@ const resetPasswordValidation = [
         .custom((value, { req }) => {
             const decode =
                 value && jwt.verify(value, resetPasswordTokenKey);
-            if (!decode) throw new Error('access forbidden');
+            if (!decode) throw new Error('cookie not found');
             req.decode = decode;
             return true;
         })
