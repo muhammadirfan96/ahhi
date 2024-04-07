@@ -3,6 +3,15 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import UsersRouter from './routers/UsersRouter.js';
 import ProductsRouter from './routers/ProductsRouter.js';
+import GudangControllerRouter from './routers/GudangControllerRouter.js';
+import InventoriBarangRouter from './routers/InventoriBarangRouter.js';
+import LokasiPenyimpananRouter from './routers/LokasiPenyimpananRouter.js';
+import PelangganRouter from './routers/PelangganRouter.js';
+import PemasokRouter from './routers/PemasokRouter.js';
+import PenerimaanBarangRouter from './routers/PenerimaanBarangRouter.js';
+import PengirimanBarangRouter from './routers/PengirimanBarangRouter.js';
+import PergeseranBarangRouter from './routers/PergeseranBarangRouter.js';
+import StokBarangRouter from './routers/StokBarangRouter.js';
 import logsMeta from './middlewares/logsMeta.js';
 import { fileURLToPath } from 'url';
 import path, { dirname } from 'path';
@@ -21,13 +30,22 @@ app.use(cookieParser());
 app.use(logsMeta);
 
 app.use((req, res, next) => {
-  req.logMeta.userId = req.uid;
+  // req.logMeta.userId = req.uid;
   logger.info('route accessed...', { meta: req.logMeta });
   next();
 });
 
 app.use(UsersRouter);
 app.use(ProductsRouter);
+app.use(GudangControllerRouter);
+app.use(InventoriBarangRouter);
+app.use(LokasiPenyimpananRouter);
+app.use(PelangganRouter);
+app.use(PemasokRouter);
+app.use(PenerimaanBarangRouter);
+app.use(PengirimanBarangRouter);
+app.use(PergeseranBarangRouter);
+app.use(StokBarangRouter);
 
 // app.use('/public', express.static(path.join(__dirname, 'public')));
 

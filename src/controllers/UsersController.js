@@ -10,6 +10,7 @@ import {
   resetPasswordTokenKey,
   activationUserTokenKey
 } from '../config/jwt.js';
+import CustomError from '../utils/CustomError.js'
 
 const showUser = async (req, res, next) => {
   try {
@@ -21,6 +22,8 @@ const showUser = async (req, res, next) => {
 
 const findUsers = async (req, res, next) => {
   try {
+    if (req.role !== 'admin') throw new CustomError(400, 'just admin are allowed');
+
     const email = req.body.email ?? '';
 
     const limit = parseInt(req.query.limit ?? 20);
@@ -32,7 +35,10 @@ const findUsers = async (req, res, next) => {
     };
 
     const all_data = (await UsersModel.find(filter)).length;
-    const data = await UsersModel.find(filter).sort({'_id': 'desc'}).skip(offset).limit(limit);
+    const data = await UsersModel.find(filter)
+      .sort({ _id: 'desc' })
+      .skip(offset)
+      .limit(limit);
 
     const result = {
       all_data: all_data,
@@ -125,7 +131,7 @@ const login = async (req, res, next) => {
   try {
     // buat refreshToken dgn email
     const refreshToken = jwt.sign(
-      { id: req.user.id, email: req.user.email },
+      { id: req.user.id, email: req.user.email, role: req.user.role },
       refreshTokenKey,
       {
         expiresIn: '1d'
@@ -146,7 +152,7 @@ const login = async (req, res, next) => {
 
     // buat accessToken
     const accessToken = jwt.sign(
-      { id: req.user.id, email: req.user.email },
+      { id: req.user.id, email: req.user.email, role: req.user.role },
       accessTokenKey,
       {
         expiresIn: '15s'
@@ -162,7 +168,7 @@ const login = async (req, res, next) => {
 const refreshToken = async (req, res, next) => {
   try {
     const accessToken = jwt.sign(
-      { id: req.decode.id, email: req.decode.email },
+      { id: req.decode.id, email: req.decode.email, role: req.decode.role },
       accessTokenKey,
       {
         expiresIn: '15s'

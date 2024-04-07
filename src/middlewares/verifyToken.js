@@ -9,7 +9,9 @@ const verifyToken = (req, res, next) => {
   jwt.verify(token, accessTokenKey, (err, decoded) => {
     if (err) return next(new CustomError(403, 'forbidden'));
     req.uid = decoded.id;
+    req.role = decoded.role
   });
+
   next();
 };
 
