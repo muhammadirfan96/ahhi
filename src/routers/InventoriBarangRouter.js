@@ -13,16 +13,16 @@ const InventoriBarangRouter = express.Router();
 
 InventoriBarangRouter.get(
   '/inventori-barang/:id',
-  verifyToken
-  // showInventoriBarangValidation,
-  // showInventoriBarang
+  verifyToken,
+  showInventoriBarangValidation,
+  showInventoriBarang
 );
 
 InventoriBarangRouter.get(
   '/inventori-barang',
-  verifyToken
-  // findInventoriBarangValidation,
-  // findInventoriBarang
+  verifyToken,
+  findInventoriBarangValidation,
+  findInventoriBarang
 );
 
 export default InventoriBarangRouter;
