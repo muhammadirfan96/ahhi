@@ -15,11 +15,11 @@ const findStokBarang = async (req, res, next) => {
     const page = parseInt(req.query.page ?? 1);
     const offset = limit * page - limit;
 
-    const id_inventaris_barang = req.query.id_inventaris_barang ?? '';
+    let filter = {};
 
-    let filter = {
-      id_inventaris_barang: { $regex: id_inventaris_barang }
-    };
+    if (req.query.id_inventaris_barang) {
+      filter.id_inventaris_barang = { $regex: id_inventaris_barang };
+    }
 
     if (req.role === 'user') {
       filter.createdBy = req.uid;

@@ -16,14 +16,19 @@ const findPenerimaanBarang = async (req, res, next) => {
     const offset = limit * page - limit;
 
     const id_inventaris_barang = req.query.id_inventaris_barang ?? '';
-    const tanggal = req.query.tanggal ?? '';
     const id_pemasok = req.query.id_pemasok ?? '';
 
     let filter = {
       id_inventaris_barang: { $regex: id_inventaris_barang },
-      tanggal: { $regex: tanggal },
       id_pemasok: { $regex: id_pemasok }
     };
+
+    if (req.query.tanggal) {
+      filter.tanggal = {
+        $gte: new Date(req.query.tanggal.split('@')[0]),
+        $lte: new Date(req.query.tanggal.split('@')[1])
+      };
+    }
 
     if (req.role === 'user') {
       filter.createdBy = req.uid;

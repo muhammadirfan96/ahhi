@@ -16,16 +16,21 @@ const findPergeseranBarang = async (req, res, next) => {
     const offset = limit * page - limit;
 
     const id_inventaris_barang = req.query.id_inventaris_barang ?? '';
-    const tanggal = req.query.tanggal ?? '';
     const lokasi_awal = req.query.lokasi_awal ?? '';
     const lokasi_akhir = req.query.lokasi_akhir ?? '';
 
     let filter = {
       id_inventaris_barang: { $regex: id_inventaris_barang },
-      tanggal: { $regex: tanggal },
       lokasi_awal: { $regex: lokasi_awal },
       lokasi_akhir: { $regex: lokasi_akhir }
     };
+
+    if (req.query.tanggal) {
+      filter.tanggal = {
+        $gte: new Date(req.query.tanggal.split('@')[0]),
+        $lte: new Date(req.query.tanggal.split('@')[1])
+      };
+    }
 
     if (req.role === 'user') {
       filter.createdBy = req.uid;

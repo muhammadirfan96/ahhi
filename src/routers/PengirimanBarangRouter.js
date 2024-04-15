@@ -12,14 +12,14 @@ import verifyToken from '../middlewares/verifyToken.js';
 const PengirimanBarangRouter = express.Router();
 
 PengirimanBarangRouter.get(
-  '/PengirimanBarang/:id',
+  '/pengiriman-barang/:id',
   verifyToken,
   showPengirimanBarangValidation,
   showPengirimanBarang
 );
 
 PengirimanBarangRouter.get(
-  '/PengirimanBarang',
+  '/pengiriman-barang',
   verifyToken,
   findPengirimanBarangValidation,
   findPengirimanBarang
