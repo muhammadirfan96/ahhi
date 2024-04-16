@@ -43,7 +43,7 @@ const penerimaanBarangValidation = [
 
 // jumlah, tanggal, id_pemasok, lokasi_penyimpanan
 const penambahanBarangValidation = [
-  // ...showInventoriBarangValidation,
+  ...showInventoriBarangValidation,
   body('jumlah').isInt({ min: 1 }).withMessage('jumlah minimum 1'),
   body('tanggal').isISO8601().toDate(),
   body('id_pemasok')
