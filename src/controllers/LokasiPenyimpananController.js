@@ -18,7 +18,7 @@ const findLokasiPenyimpanan = async (req, res, next) => {
     const lokasi = req.query.lokasi ?? '';
 
     let filter = {
-      lokasi: { $regex: lokasi },
+      lokasi: { $regex: lokasi , $options: 'i'},
     };
 
     if (req.role === 'user') {

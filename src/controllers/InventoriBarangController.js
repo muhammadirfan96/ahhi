@@ -20,9 +20,9 @@ const findInventoriBarang = async (req, res, next) => {
     const nomor_seri = req.query.nomor_seri ?? '';
 
     let filter = {
-      nama: { $regex: nama },
-      jenis: { $regex: jenis },
-      nomor_seri: { $regex: nomor_seri }
+      nama: { $regex: nama, $options: 'i' },
+      jenis: { $regex: jenis, $options: 'i' },
+      nomor_seri: { $regex: nomor_seri , $options: 'i'}
     };
 
     if (req.role === 'user') {

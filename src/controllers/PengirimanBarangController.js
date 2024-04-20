@@ -19,8 +19,8 @@ const findPengirimanBarang = async (req, res, next) => {
     const id_pelanggan = req.query.id_pelanggan ?? '';
 
     let filter = {
-      id_inventaris_barang: { $regex: id_inventaris_barang },
-      id_pelanggan: { $regex: id_pelanggan }
+      id_inventaris_barang: { $regex: id_inventaris_barang, $options: 'i' },
+      id_pelanggan: { $regex: id_pelanggan, $options: 'i' }
     };
 
     if (req.query.tanggal) {

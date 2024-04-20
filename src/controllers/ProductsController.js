@@ -23,7 +23,7 @@ const findProducts = async (req, res, next) => {
     let filter;
     if (req.role === 'admin') {
       filter = {
-        name: { $regex: name },
+        name: { $regex: name, $options: 'i' },
         price: {
           $gte: parseInt(price.split('-')[0]),
           $lte: parseInt(price.split('-')[1])
@@ -31,7 +31,7 @@ const findProducts = async (req, res, next) => {
       };
     } else if (req.role === 'user') {
       filter = {
-        name: { $regex: name },
+        name: { $regex: name, $options: 'i' },
         price: {
           $gte: parseInt(price.split('-')[0]),
           $lte: parseInt(price.split('-')[1])

@@ -31,7 +31,7 @@ const findUsers = async (req, res, next) => {
     const offset = limit * page - limit;
 
     const filter = {
-      email: { $regex: email }
+      email: { $regex: email , $options: 'i'}
     };
 
     const all_data = (await UsersModel.find(filter)).length;

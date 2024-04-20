@@ -42,7 +42,7 @@ const findStokBarangValidation = [
 ];
 
 const createStokBarangValidation = [
-  body('id_inventori_barang')
+  body('id_inventaris_barang')
     .isMongoId()
     .withMessage('invalid ID')
     .bail()

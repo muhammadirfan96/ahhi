@@ -20,9 +20,9 @@ const findPergeseranBarang = async (req, res, next) => {
     const lokasi_akhir = req.query.lokasi_akhir ?? '';
 
     let filter = {
-      id_inventaris_barang: { $regex: id_inventaris_barang },
-      lokasi_awal: { $regex: lokasi_awal },
-      lokasi_akhir: { $regex: lokasi_akhir }
+      id_inventaris_barang: { $regex: id_inventaris_barang, $options: 'i' },
+      lokasi_awal: { $regex: lokasi_awal , $options: 'i'},
+      lokasi_akhir: { $regex: lokasi_akhir, $options: 'i' }
     };
 
     if (req.query.tanggal) {

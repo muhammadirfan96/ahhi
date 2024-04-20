@@ -20,9 +20,9 @@ const findPelanggan = async (req, res, next) => {
     const kontak = req.query.kontak ?? '';
 
     let filter = {
-      nama: { $regex: nama },
-      alamat: { $regex: alamat },
-      kontak: { $regex: kontak }
+      nama: { $regex: nama , $options: 'i'},
+      alamat: { $regex: alamat, $options: 'i' },
+      kontak: { $regex: kontak , $options: 'i'}
     };
 
     if (req.role === 'user') {

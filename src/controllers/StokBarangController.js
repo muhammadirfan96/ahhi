@@ -18,7 +18,7 @@ const findStokBarang = async (req, res, next) => {
     let filter = {};
 
     if (req.query.id_inventaris_barang) {
-      filter.id_inventaris_barang = { $regex: id_inventaris_barang };
+      filter.id_inventaris_barang = { $regex: id_inventaris_barang , $options: 'i'};
     }
 
     if (req.role === 'user') {
