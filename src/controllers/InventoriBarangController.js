@@ -15,7 +15,7 @@ const findInventoriBarang = async (req, res, next) => {
     const page = parseInt(req.query.page ?? 1);
     const offset = limit * page - limit;
 
-    const nama = req.query.name ?? '';
+    const nama = req.query.nama ?? '';
     const jenis = req.query.jenis ?? '';
     const nomor_seri = req.query.nomor_seri ?? '';
 
