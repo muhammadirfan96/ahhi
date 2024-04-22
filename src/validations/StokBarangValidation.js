@@ -57,10 +57,13 @@ const createStokBarangValidation = [
           throw new Error('role not allowed');
         }
 
-        const data = await InventoriBarangModel.findOne(filter);
+        const inventori = await InventoriBarangModel.findOne(filter);
+        if (!inventori) throw new Error('data not found');
 
-        if (!data) throw new Error('data not found');
-        // req.data = data;
+        const stok = await StokBarangModel.findOne({
+          id_inventaris_barang: value
+        });
+        if (stok) throw new Error('inventori already exists');
       } catch (err) {
         throw new Error(err.message);
       }
