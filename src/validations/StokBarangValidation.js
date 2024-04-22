@@ -91,7 +91,51 @@ const createStokBarangValidation = [
 
 const updateStokBarangValidation = [
   ...showStokBarangValidation,
-  ...createStokBarangValidation
+  body('id_inventaris_barang')
+    .isMongoId()
+    .withMessage('invalid ID')
+    .bail()
+    .custom(async (value, { req }) => {
+      try {
+        let filter;
+        if (req.role === 'admin') {
+          filter = { _id: value };
+        } else if (req.role === 'user') {
+          filter = { _id: value, createdBy: req.uid };
+        } else {
+          throw new Error('role not allowed');
+        }
+
+        const inventori = await InventoriBarangModel.findOne(filter);
+        if (!inventori) throw new Error('data not found');
+
+        const stok = await StokBarangModel.findOne({
+          id_inventaris_barang: value
+        });
+        if (!stok) throw new Error('inventori not found');
+      } catch (err) {
+        throw new Error(err.message);
+      }
+      return true;
+    })
+    .bail({ level: 'request' }),
+  body('minimal')
+    .trim()
+    .escape()
+    .notEmpty()
+    .withMessage('minimal required')
+    .bail()
+    .isNumeric()
+    .withMessage('minimal must numeric'),
+  body('maksimal')
+    .trim()
+    .escape()
+    .notEmpty()
+    .withMessage('maksimal required')
+    .bail()
+    .isNumeric()
+    .withMessage('maksimal must numeric'),
+  runValidation
 ];
 
 const deleteStokBarangValidation = [...showStokBarangValidation];
