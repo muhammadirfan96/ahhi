@@ -109,10 +109,8 @@ const updateStokBarangValidation = [
         const inventori = await InventoriBarangModel.findOne(filter);
         if (!inventori) throw new Error('data not found');
 
-        const stok = await StokBarangModel.findOne({
-          id_inventaris_barang: value
-        });
-        if (!stok) throw new Error('inventori not found');
+        if (req.data.id_inventaris_barang !== value)
+          throw new Error('inventori not match');
       } catch (err) {
         throw new Error(err.message);
       }
