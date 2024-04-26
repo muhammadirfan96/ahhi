@@ -163,7 +163,7 @@ const pergeseranBarang = async (req, res, next) => {
     // add lokssi penyimpanan
     const newLokasiPenyimpanan = new LokasiPenyimpananModel({
       id_inventaris_barang: data._id,
-      lokasi: lokasi_penyimpanan,
+      lokasi: lokasi_tujuan,
       jumlah,
       createdBy: req.uid || null,
       updatedBy: req.uid || null
