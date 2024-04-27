@@ -3,6 +3,7 @@ import PemasokModel from '../models/PemasokModel.js';
 import PelangganModel from '../models/PelangganModel.js';
 import runValidation from '../middlewares/runValidation.js';
 import { showInventoriBarangValidation } from './InventoriBarangValidation.js';
+import { showLokasiPenyimpananValidation } from './LokasiPenyimpananValidation.js';
 
 const penerimaanBarangValidation = [
   body('nama').trim().escape().notEmpty().withMessage('nama required'),
@@ -112,13 +113,20 @@ const pengirimanBarangValidation = [
 
 // lokasi_tujuan, jumlah, tanggal
 const pergeseranBarangValidation = [
-  ...showInventoriBarangValidation,
+  ...showLokasiPenyimpananValidation,
   body('lokasi_tujuan')
     .trim()
     .escape()
     .notEmpty()
     .withMessage('lokasi_tujuan required'),
-  body('jumlah').isInt({ min: 1 }).withMessage('jumlah minimum 1'),
+  body('jumlah')
+    .isInt({ min: 1 })
+    .withMessage('jumlah minimum 1')
+    .custom((value, { req }) => {
+      value > req.data.jumlah &&
+        new Error(`jumlah maksimum ${req.data.jumlah}`);
+      return true;
+    }),
   body('tanggal').isISO8601().toDate(),
   runValidation
 ];
@@ -129,4 +137,3 @@ export {
   pengirimanBarangValidation,
   pergeseranBarangValidation
 };
-

@@ -141,7 +141,7 @@ const pergeseranBarang = async (req, res, next) => {
 
     // add pergeseran barang
     const newPergeseranBarang = new PergeseranBarangModel({
-      id_inventaris_barang: data._id,
+      id_inventaris_barang: data.id_inventaris_barang,
       jumlah,
       tanggal,
       lokasi_awal: data.lokasi,
@@ -152,7 +152,7 @@ const pergeseranBarang = async (req, res, next) => {
 
     const addedPergeseranBarang = await newPergeseranBarang.save();
 
-    // update lokasi penyimpanan berdasarkan id inventaris, kurangi jumlahnya dgn jumlah yg baru
+    // update lokasi penyimpanan berdasarkan id lokasi penyimpanan, kurangi jumlahnya dgn jumlah yg baru
     const updatedLokasiPenyimpanan =
       await LokasiPenyimpananModel.findByIdAndUpdate(
         data._id,
@@ -162,7 +162,7 @@ const pergeseranBarang = async (req, res, next) => {
 
     // add lokssi penyimpanan
     const newLokasiPenyimpanan = new LokasiPenyimpananModel({
-      id_inventaris_barang: data._id,
+      id_inventaris_barang: data.id_inventaris_barang,
       lokasi: lokasi_tujuan,
       jumlah,
       createdBy: req.uid || null,
