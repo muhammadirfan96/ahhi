@@ -106,16 +106,9 @@ const pengirimanBarang = async (req, res, next) => {
     const data = req.data;
     const { jumlah, tanggal, id_pelanggan } = req.body;
 
-    // updated inventaris barang
-    const updatedInventoriBarang = await InventoriBarangModel.findByIdAndUpdate(
-      data._id,
-      { jumlah: data.jumlah - parseInt(jumlah) },
-      { new: true }
-    );
-
     // add pengiriman barang
     const newPengirimanBarang = new PengirimanBarangModel({
-      id_inventaris_barang: updatedInventoriBarang._id,
+      id_inventaris_barang: data.id_inventaris_barang,
       jumlah,
       tanggal,
       id_pelanggan,
@@ -125,7 +118,23 @@ const pengirimanBarang = async (req, res, next) => {
 
     const addedPengirimanBarang = await newPengirimanBarang.save();
 
+    // update lokasi penyimpanan berdasarkan id lokasi penyimpanan, kurangi jumlahnya dgn jumlah yg baru
+    const updatedLokasiPenyimpanan =
+      await LokasiPenyimpananModel.findByIdAndUpdate(
+        data._id,
+        { jumlah: data.jumlah - parseInt(jumlah) },
+        { new: true }
+      );
+
+    // updated inventaris barang
+    const updatedInventoriBarang = await InventoriBarangModel.findByIdAndUpdate(
+      data.id_inventaris_barang,
+      { jumlah: data.jumlah - parseInt(jumlah) },
+      { new: true }
+    );
+
     res.status(200).json({
+      updatedLokasiPenyimpanan,
       updatedInventoriBarang,
       addedPengirimanBarang
     });

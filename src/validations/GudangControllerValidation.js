@@ -81,8 +81,15 @@ const penambahanBarangValidation = [
 
 // jumlah, tanggal, id_pelanggan
 const pengirimanBarangValidation = [
-  ...showInventoriBarangValidation,
-  body('jumlah').isInt({ min: 1 }).withMessage('jumlah minimum 1'),
+  ...showLokasiPenyimpananValidation,
+  body('jumlah')
+    .isInt({ min: 1 })
+    .withMessage('jumlah minimum 1')
+    .custom((value, { req }) => {
+      if (value > req.data.jumlah)
+      throw  new Error(`jumlah maksimum ${req.data.jumlah}`);
+      return true;
+    }),
   body('tanggal').isISO8601().toDate(),
   body('id_pelanggan')
     .isMongoId()
@@ -99,9 +106,8 @@ const pengirimanBarangValidation = [
           throw new Error('role not allowed');
         }
 
-        const data = await PelangganModel.findOne(filter);
-        if (!data) throw new Error('data not found');
-        // req.data = data;
+        const pelanggan = await PelangganModel.findOne(filter);
+        if (!pelanggan) throw new Error('data not found');
       } catch (err) {
         throw new Error(err.message);
       }
@@ -123,8 +129,8 @@ const pergeseranBarangValidation = [
     .isInt({ min: 1 })
     .withMessage('jumlah minimum 1')
     .custom((value, { req }) => {
-      value > req.data.jumlah &&
-        new Error(`jumlah maksimum ${req.data.jumlah}`);
+      if (value > req.data.jumlah)
+        throw new Error(`jumlah maksimum ${req.data.jumlah}`);
       return true;
     }),
   body('tanggal').isISO8601().toDate(),
