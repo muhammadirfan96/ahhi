@@ -127,9 +127,12 @@ const pengirimanBarang = async (req, res, next) => {
       );
 
     // updated inventaris barang
+    const oldInventoriBarang = await InventoriBarangModel.findById(
+      data.id_inventaris_barang
+    );
     const updatedInventoriBarang = await InventoriBarangModel.findByIdAndUpdate(
       data.id_inventaris_barang,
-      { jumlah: data.jumlah - parseInt(jumlah) },
+      { jumlah: oldInventoriBarang.jumlah - parseInt(jumlah) },
       { new: true }
     );
 
