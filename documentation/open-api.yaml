@@ -1,219 +1,1158 @@
 openapi: 3.0.3
 info:
-  title: RESTFUL API TOKO FAHAD STAR - OpenAPI 3.0
+  title: CATATAN GUDANG
   description: |-
-    - deskrips di sini
-  termsOfService: http://swagger.io/terms/
+    - aplikasi catatan gudang
   contact:
     email: MUHAMMADIRFANIRFANI808@GMAIL.COM
-  license:
-    name: Apache 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0.html
-  version: 1.0.11
+  version: 1.0.0
 servers:
-  - url: http://localhost:5000/mydomain/fahad-star/v1
+  - url: http://localhost:5000/mydomain/catatan-gudag/v1
 tags:
-  - name: product
-    description: Product CRUD
+  - name: gudang-controller
+  - name: inventori-barang
+  - name: lokasi-penyimpanan
+  - name: pelanggan
+  - name: pemasok
+  - name: penerimaan-barang
+  - name: pengiriman-barang
+  - name: pergeseran-barang
+  - name: stok-barang
   - name: user
-    description: Operations about user
 paths:
-  /product:
+  /penerimaan:
     post:
       tags:
-        - product
-      summary: create a new product
+        - gudang-controller
+      summary: penerimaan barang baru
       description: |
-        - validasi:
-          - name:
-            - required
-          - price:
-            - required
-          - createdBy:
-            - valid user id
-          - updatedBy:
-            - valid user id
+        - ferifikasi token
+        - validasi
+        - add inventaris barang
+        - add penerimaan barang
+        - add lokasi penyimpanan
       requestBody:
         content:
           application/json:
             example:
-              "name": "produk 1"
-              "price": 20000
-              "createdBy": 2
-              "updatedBy": 2
-              "createdAt": "2023-08-20"
-              "updatedAt": "2023-08-20"
+              'nama': 'produk 1'
+              'jumlah': 20000
+              'jenis': 'tekstil'
+              'tanggal': '2023-08-20'
+              'id_pemasok': 'ejjej3jejenj3nenenenn3ne'
+              'lokasi_penyimpanan': 'zona a'
       responses:
-        '201':
-          $ref: '#/components/responses/Created'
+        '200':
+          $ref: '#/components/responses/200'
         '400':
-          $ref: '#/components/responses/InvalidUrl'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '405':
-          $ref: '#/components/responses/InvalidInput'
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
       security:
         - bearerAuth: []
-        
-    get:
-      summary: select multiple product
-      description: |
-        - filter data pencarian menggunakan query parameter
-        - untuk field price menggunakan range 
-        - untuk field name menggunakan kemiripan kata
+
+  /penambahan/{id_inventaris_barang}:
+    patch:
       tags:
-        - product
+        - gudang-controller
+      summary: penerimaan barang lama
+      description: |
+        - ferifikasi token
+        - validasi
+        - update inventaris barang
+        - add penerimaan barang
+        - add lokasi penyimpanan
       parameters:
-        - in: query
-          name: name
+        - in: path
+          name: id_inventaris_barang
           schema:
             type: string
-            default: ""
-        - in: query
-          name: price
+          required: true
+      requestBody:
+        content:
+          application/json:
+            example:
+              'jumlah': 20000
+              'tanggal': '2023-08-20'
+              'id_pemasok': 'ejjej3jejenj3nenenenn3ne'
+              'lokasi_penyimpanan': 'zona a'
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+      security:
+        - bearerAuth: []
+
+  /pengiriman/{id_lokasi_penyimpanan}:
+    patch:
+      tags:
+        - gudang-controller
+      summary: pengiriman barang
+      description: |
+        - ferifikasi token
+        - validasi
+        - add pengiriman barang
+        - update lokasi penyimpanan, kurangi jumlahnya dgn jumlah yg baru
+        - updated inventaris barang, kurangi jumlahnya dgn jumlah yg baru
+      parameters:
+        - in: path
+          name: id_lokasi_penyimpanan
           schema:
             type: string
-            default: 0-999999999999
+          required: true
+      requestBody:
+        content:
+          application/json:
+            example:
+              'jumlah': 20000
+              'tanggal': '2023-08-20'
+              'id_pelanggan': 'ejjej3jejenj3nenenenn3ne'
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+      security:
+        - bearerAuth: []
+
+  /pergeseran/{id_lokasi_penyimpanan}:
+    patch:
+      tags:
+        - gudang-controller
+      summary: pergeseran barang
+      description: |
+        - ferifikasi token
+        - validasi
+        - add pergeseran barang
+        - update lokasi penyimpanan, kurangi jumlahnya dgn jumlah yg baru
+        - add lokasi penyimpanan
+      parameters:
+        - in: path
+          name: id_lokasi_penyimpanan
+          schema:
+            type: string
+          required: true
+      requestBody:
+        content:
+          application/json:
+            example:
+              'lokasi_tujuan': 'zona c'
+              'jumlah': 20000
+              'tanggal': '2023-08-20'
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+      security:
+        - bearerAuth: []
+
+  /inventori-barang/{id_inventaris_barang}:
+    get:
+      tags:
+        - inventori-barang
+      summary: show single inventori barang
+      description: |
+        - ferifikasi token
+        - validasi
+        - show single inventori-barang
+      parameters:
+        - in: path
+          name: id_inventaris_barang
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InventoriBarang'
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+      security:
+        - bearerAuth: []
+
+  /inventori-barang:
+    get:
+      tags:
+        - inventori-barang
+      summary: show multi inventori barang
+      description: |
+        - ferifikasi token
+        - validasi
+        - show multi inventori-barang
+      parameters:
         - in: query
           name: limit
           schema:
-            type: integer
-            minimum: 1
-            default: 20
+            type: string
+          required: false
         - in: query
           name: page
           schema:
-            type: integer
-            minimum: 1
-            default: 1
+            type: string
+          required: false
+        - in: query
+          name: nama
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: jenis
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: nomor_seri
+          schema:
+            type: string
+          required: false
       responses:
         '200':
           description: OK
           content:
             application/json:
-              example:
-                result:
-                  total_data: 2
-                  total_page: 1
-                  crr_page: 1
+              schema:
+                type: object
+                properties:
+                  all_data:
+                    type: integer
+                    example: 100
+                  all_page:
+                    type: integer
+                    example: 10
+                  current_page:
+                    type: integer
+                    example: 1
                   data:
-                    - id: 1
-                      name: "Product A"
-                      price: 20000
-                      createdBy: 2
-                      updatedBy: 2
-                      createdAt: 2023-06-22
-                      updateddAt: 2023-06-22
-                    - id: 2
-                      name: "Product B"
-                      price: 19000
-                      createdBy: 2
-                      updatedBy: 2
-                      createdAt: 2023-06-22
-                      updateddAt: 2023-06-22
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/InventoriBarang'
         '400':
-          $ref: '#/components/responses/InvalidUrl'
-        '403':
-          $ref: '#/components/responses/Forbidden'
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
       security:
         - bearerAuth: []
-        
-  /product/{productId}:
+
+  /lokasi-penyimpanan/{id_lokasi_penyimpanan}:
     get:
       tags:
-        - product
-      summary: Get crr product
+        - lokasi-penyimpanan
+      summary: show single lokasi-penyimpanan
+      description: |
+        - ferifikasi token
+        - validasi
+        - show single lokasi-penyimpanan
       parameters:
         - in: path
-          name: productId
+          name: id_lokasi_penyimpanan
           schema:
-            type: integer
-            format: int64
-            example: 1
+            type: string
           required: true
       responses:
         '200':
           description: OK
           content:
             application/json:
-              example:
-                result:
-                  id: 2
-                  name: "Product B"
-                  price: 19000
-                  createdBy: 2
-                  updatedBy: 2
-                  createdAt: 2023-06-22
-                  updateddAt: 2023-06-22
+              schema:
+                $ref: '#/components/schemas/LokasiPenyimpanan'
         '400':
-          $ref: '#/components/responses/InvalidUrl'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
       security:
         - bearerAuth: []
-        
+
+  /lokasi-penyimpanan:
+    get:
+      tags:
+        - lokasi-penyimpanan
+      summary: show multi lokasi-penyimpanan
+      description: |
+        - ferifikasi token
+        - validasi
+        - show multi lokasi-penyimpanan
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: page
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: lokasi
+          schema:
+            type: string
+          required: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  all_data:
+                    type: integer
+                    example: 100
+                  all_page:
+                    type: integer
+                    example: 10
+                  current_page:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/LokasiPenyimpanan'
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+      security:
+        - bearerAuth: []
+
+  /penerimaan-barang/{id_penerimaan-barang}:
+    get:
+      tags:
+        - penerimaan-barang
+      summary: show single penerimaan-barang
+      description: |
+        - ferifikasi token
+        - validasi
+        - show single penerimaan-barang
+      parameters:
+        - in: path
+          name: id_penerimaan-barang
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PenerimaanBarang'
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+      security:
+        - bearerAuth: []
+
+  /penerimaan-barang:
+    get:
+      tags:
+        - penerimaan-barang
+      summary: show multi penerimaan-barang
+      description: |
+        - ferifikasi token
+        - validasi
+        - show multi penerimaan-barang
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: page
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: id_inventaris_barang
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: id_pemasok
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: tanggal
+          schema:
+            type: string
+          required: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  all_data:
+                    type: integer
+                    example: 100
+                  all_page:
+                    type: integer
+                    example: 10
+                  current_page:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PenerimaanBarang'
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+      security:
+        - bearerAuth: []
+
+  /pengiriman-barang/{id_pengiriman-barang}:
+    get:
+      tags:
+        - pengiriman-barang
+      summary: show single pengiriman-barang
+      description: |
+        - ferifikasi token
+        - validasi
+        - show single pengiriman-barang
+      parameters:
+        - in: path
+          name: id_pengiriman-barang
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PengirimanBarang'
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+      security:
+        - bearerAuth: []
+
+  /pengiriman-barang:
+    get:
+      tags:
+        - pengiriman-barang
+      summary: show multi pengiriman-barang
+      description: |
+        - ferifikasi token
+        - validasi
+        - show multi pengiriman-barang
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: page
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: id_inventaris_barang
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: id_pelanggan
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: tanggal
+          schema:
+            type: string
+          required: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  all_data:
+                    type: integer
+                    example: 100
+                  all_page:
+                    type: integer
+                    example: 10
+                  current_page:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PengirimanBarang'
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+      security:
+        - bearerAuth: []
+
+  /pergeseran-barang/{id_pergeseran-barang}:
+    get:
+      tags:
+        - pergeseran-barang
+      summary: show single pergeseran-barang
+      description: |
+        - ferifikasi token
+        - validasi
+        - show single pergeseran-barang
+      parameters:
+        - in: path
+          name: id_pergeseran-barang
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PergeseranBarang'
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+      security:
+        - bearerAuth: []
+
+  /pergeseran-barang:
+    get:
+      tags:
+        - pergeseran-barang
+      summary: show multi pergeseran-barang
+      description: |
+        - ferifikasi token
+        - validasi
+        - show multi pergeseran-barang
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: page
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: id_inventaris_barang
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: lokasi_awal
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: lokasi_akhir
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: tanggal
+          schema:
+            type: string
+          required: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  all_data:
+                    type: integer
+                    example: 100
+                  all_page:
+                    type: integer
+                    example: 10
+                  current_page:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PergeseranBarang'
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+      security:
+        - bearerAuth: []
+
+  /pelanggan/{id_pelanggan}:
+    get:
+      tags:
+        - pelanggan
+      summary: show single pelanggan
+      description: |
+        - ferifikasi token
+        - validasi
+        - show single pelanggan
+      parameters:
+        - in: path
+          name: id_pelanggan
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pelanggan'
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+      security:
+        - bearerAuth: []
+
     patch:
       tags:
-        - product
-      summary: Update crr product
-      parameters:
-        - in: path 
-          name: productId
-          schema:
-            type: integer
-            format: int64
-            example: 1
-          required: true
+        - pelanggan
+      summary: update current pelanggan
+      description: |
+        - ferifikasi token
+        - validasi
+        - update data pelanggan
       requestBody:
-        required: true 
         content:
           application/json:
-            example:
-              "name": "produk 1"
-              "price": 20000
-              "createdBy": 2
-              "updatedBy": 2
-              "createdAt": "2023-08-20"
-              "updatedAt": "2023-08-20"
-      responses:
-        '200':
-          $ref: '#/components/responses/Success'
-        '400':
-          $ref: '#/components/responses/InvalidUrl'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '405':
-          $ref: '#/components/responses/InvalidInput'
-      security:
-        - bearerAuth: []
-        
-    delete:
-      tags:
-        - product
+            schema:
+              $ref: '#/components/schemas/Pelanggan'
       parameters:
-        - in: path 
-          name: productId
+        - in: path
+          name: id_pelanggan
           schema:
-            type: integer
-            format: int64
-            example: 1
+            type: string
           required: true
       responses:
         '200':
-          $ref: '#/components/responses/Success'
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pelanggan'
         '400':
-          $ref: '#/components/responses/InvalidUrl'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
       security:
         - bearerAuth: []
-        
+
+    delete:
+      tags:
+        - pelanggan
+      summary: delete current pelanggan
+      description: |
+        - ferifikasi token
+        - validasi
+        - delete current pelanggan
+      parameters:
+        - in: path
+          name: id_pelanggan
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pelanggan'
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+      security:
+        - bearerAuth: []
+
+  /pelanggan:
+    get:
+      tags:
+        - pelanggan
+      summary: show multi pelanggan
+      description: |
+        - ferifikasi token
+        - validasi
+        - show multi pelanggan
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: page
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: nama
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: alamat
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: kontak
+          schema:
+            type: string
+          required: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  all_data:
+                    type: integer
+                    example: 100
+                  all_page:
+                    type: integer
+                    example: 10
+                  current_page:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Pelanggan'
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+      security:
+        - bearerAuth: []
+
+    post:
+      tags:
+        - pelanggan
+      summary: add new pelanggan
+      description: |
+        - ferifikasi token
+        - validasi
+        - add new pelanggan
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pelanggan'
+      responses:
+        '201':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pelanggan'
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+      security:
+        - bearerAuth: []
+
+  /pemasok/{id_pemasok}:
+    get:
+      tags:
+        - pemasok
+      summary: show single pemasok
+      description: |
+        - ferifikasi token
+        - validasi
+        - show single pemasok
+      parameters:
+        - in: path
+          name: id_pemasok
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pemasok'
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+      security:
+        - bearerAuth: []
+
+    patch:
+      tags:
+        - pemasok
+      summary: update current pemasok
+      description: |
+        - ferifikasi token
+        - validasi
+        - update data pemasok
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pemasok'
+      parameters:
+        - in: path
+          name: id_pemasok
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pemasok'
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+      security:
+        - bearerAuth: []
+
+    delete:
+      tags:
+        - pemasok
+      summary: delete current pemasok
+      description: |
+        - ferifikasi token
+        - validasi
+        - delete current pemasok
+      parameters:
+        - in: path
+          name: id_pemasok
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pemasok'
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+      security:
+        - bearerAuth: []
+
+  /pemasok:
+    get:
+      tags:
+        - pemasok
+      summary: show multi pemasok
+      description: |
+        - ferifikasi token
+        - validasi
+        - show multi pemasok
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: page
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: nama
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: alamat
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: kontak
+          schema:
+            type: string
+          required: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  all_data:
+                    type: integer
+                    example: 100
+                  all_page:
+                    type: integer
+                    example: 10
+                  current_page:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Pemasok'
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+      security:
+        - bearerAuth: []
+
+    post:
+      tags:
+        - pemasok
+      summary: add new pemasok
+      description: |
+        - ferifikasi token
+        - validasi
+        - add new pemasok
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pemasok'
+      responses:
+        '201':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pemasok'
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+      security:
+        - bearerAuth: []
+
+  /stok-barang/{id_stok-barang}:
+    get:
+      tags:
+        - stok-barang
+      summary: show single stok-barang
+      description: |
+        - ferifikasi token
+        - validasi
+        - show single stok-barang
+      parameters:
+        - in: path
+          name: id_stok-barang
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StokBarang'
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+      security:
+        - bearerAuth: []
+
+    patch:
+      tags:
+        - stok-barang
+      summary: update current stok-barang
+      description: |
+        - ferifikasi token
+        - validasi
+        - update data stok-barang
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StokBarang'
+      parameters:
+        - in: path
+          name: id_stok-barang
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StokBarang'
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+      security:
+        - bearerAuth: []
+
+    delete:
+      tags:
+        - stok-barang
+      summary: delete current stok-barang
+      description: |
+        - ferifikasi token
+        - validasi
+        - delete current stok-barang
+      parameters:
+        - in: path
+          name: id_stok-barang
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StokBarang'
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+      security:
+        - bearerAuth: []
+
+  /stok-barang:
+    get:
+      tags:
+        - stok-barang
+      summary: show multi stok-barang
+      description: |
+        - ferifikasi token
+        - validasi
+        - show multi stok-barang
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: page
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: nama
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: alamat
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: kontak
+          schema:
+            type: string
+          required: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  all_data:
+                    type: integer
+                    example: 100
+                  all_page:
+                    type: integer
+                    example: 10
+                  current_page:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/StokBarang'
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+      security:
+        - bearerAuth: []
+
+    post:
+      tags:
+        - stok-barang
+      summary: add new stok-barang
+      description: |
+        - ferifikasi token
+        - validasi
+        - add new stok-barang
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StokBarang'
+      responses:
+        '201':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StokBarang'
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+      security:
+        - bearerAuth: []
+
+  ##############################################################
+  ##############################################################
+  ##############################################################
+
   /users:
     get:
       tags:
@@ -224,12 +1163,12 @@ paths:
           name: email
           schema:
             type: string
-            default: ""
+            default: ''
         - in: query
           name: phone
           schema:
             type: string
-            default: ""
+            default: ''
         - in: query
           name: limit
           schema:
@@ -247,33 +1186,68 @@ paths:
           description: OK
           content:
             application/json:
-              example:
-                result:
-                  total_data: 2
-                  total_page: 1
-                  crr_page: 1
-                  data: 
-                    - id: 1
-                      email: "muhammadirfan187@outlook.com"
-                      phone: "082302173682"
-                      role: admin
-                    - id: 2
-                      email: "jamilanatsir@gmail.com"
-                      phone: "082302173682"
-                      role: user
+              schema:
+                type: object
+                properties:
+                  all_data:
+                    type: integer
+                    example: 100
+                  all_page:
+                    type: integer
+                    example: 10
+                  current_page:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
         '400':
-          $ref: '#/components/responses/InvalidUrl'
-        '403':
-          $ref: '#/components/responses/Forbidden'
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
       security:
         - bearerAuth: []
 
   /user/{userId}:
+    get:
+      tags:
+        - user
+      summary: show single user
+      description: |
+        - verifikasi token
+        - validasi
+        - show single user
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application//json:
+              schema:
+                '$ref': '#/components/schemas/User'
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+      security:
+        - bearerAuth: []
+
     delete:
       tags:
         - user
+      summary: delete current user
+      description: |
+        - verifikasi token
+        - validasi
+        - delete current user
       parameters:
-        - in: path 
+        - in: path
           name: userId
           schema:
             type: integer
@@ -282,17 +1256,19 @@ paths:
           required: true
       responses:
         '200':
-          $ref: '#/components/responses/Success'
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
         '400':
-          $ref: '#/components/responses/InvalidUrl'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
       security:
         - bearerAuth: []
-      
-  /user/register:
+
+  /register:
     post:
       tags:
         - user
@@ -313,107 +1289,218 @@ paths:
         content:
           application/json:
             example:
-              "email": "muhammadirfanirfani808@gmail.com"
-              "password": "123456" 
-              "confPassword": "123456"
+              'email': 'muhammadirfanirfani808@gmail.com'
+              'password': '123456'
+              'confPassword': '123456'
       responses:
         '200':
-          $ref: '#/components/responses/Success'
+          $ref: '#/components/responses/200'
         '400':
-          $ref: '#/components/responses/InvalidUrl'
-        '405':
-          $ref: '#/components/responses/InvalidInput'
-        
-  /user/activateUser:
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+
+  /activation-user/{user_email}:
     patch:
       tags:
         - user
       summary: activation user
       description: |
-        - validasi:
-          - email:
-            - sudah terdaftar
-          - activation-token: 
-            - match dengan user.activationToken
-        - pilih current data user berdasarkkan email
-        - update user: 
+        - validasi
+          - cookie
+            - activationUserToken
+              - verifikasi jwt
+          - param
+            - user_email
+              - sudah terdaftar
+          - body
+            - activationToken
+              - match dengan user.activationToken
+        - pilih current data user berdasarkkan user_email
+        - update user 
           - field active nya menjadi 1
           - field activationToken nya menjadi null
+      parameters:
+        - in: path
+          name: user_email
+          schema:
+            type: string
+          required: true
       requestBody:
         content:
           application/json:
             example:
-              "email": "email@email.com"
-              "activation-token": "jihugytfrd4e3w5r7y8i"
+              'activationToken': 'jihugytfrd4e3w5r7y8i'
       responses:
         '200':
-          $ref: "#/components/responses/Success"
+          $ref: '#/components/responses/200'
         '400':
-          $ref: '#/components/responses/InvalidUrl'
-        '405':
-          $ref: '#/components/responses/InvalidInput'
-  /user/login:
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+
+  /login:
     post:
       tags:
         - user
       summary: login to get accessToken
-      description: | 
+      description: |
         - validation:
-          - email: 
-            - sudah terdaftar
-          - password: 
-            - match dengan password nya email
+          - body
+            - email: 
+              - sudah terdaftar
+            - password: 
+              - match dengan password nya email
       requestBody:
-        content: 
+        content:
           application/json:
             example:
-              "email": "email@email.com"
-              "password": "123456"
+              'email': 'email@email.com'
+              'password': '123456'
       responses:
         '200':
-          description: success
-          content: 
-            application/json: 
+          description: OK
+          content:
+            application/json:
               example:
-                result: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVtYWlsQGVtYWlsLmNvbSIsImlhdCI6MTUxNjIzOTAyMn0.UOQFRvx2JwT1PcDKqbfj9f_WN66Gs_giUMGv3bgVcE8
+                'accessToken': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVtYWlsQGVtYWlsLmNvbSIsImlhdCI6MTUxNjIzOTAyMn0.UOQFRvx2JwT1PcDKqbfj9f_WN66Gs_giUMGv3bgVcE8'
         '400':
-          $ref: '#/components/responses/InvalidUrl'
-        '405':
-          $ref: '#/components/responses/InvalidInput'
-  
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+
+  /refresh-token:
+    get:
+      tags:
+        - user
+      summary: refresh token to get new accessToken
+      description: |
+        - validation
+          - cookie
+            - verifikasi jwt
+        - generate access token baru
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                'accessToken': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVtYWlsQGVtYWlsLmNvbSIsImlhdCI6MTUxNjIzOTAyMn0.UOQFRvx2JwT1PcDKqbfj9f_WN66Gs_giUMGv3bgVcE8'
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+
+  /forgot-password:
+    post:
+      tags:
+        - user
+      summary: send reset password token to valid user email
+      description: |
+        - validation
+          - body
+            - email
+              - ada samanya di tabel user
+        - update user.resetPasswordToken dgn 30 random string
+        - kirim 30 random string ke email user
+        - buat cookie resetPasswordToken
+      requestBody:
+        content:
+          application/json:
+            example:
+              'email': 'muhammadirfanirfani808@gmail.com'
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+
+  /reset-password/{user_email}:
+    patch:
+      tags:
+        - user
+      summary: reset password current user
+      description: |
+        - validation
+          - cookie
+            - resetPasswordToken
+              - verifikasi jwt
+          - param
+            - user_email
+              - ada samanya di DB
+          - body
+            - resetPasswordToken
+              - match dengan user.resetPasswordToken
+            - password
+            - confPassword
+        - update user.password dgn password baru
+        - update user.resetPasswordToken dgn null
+        - hapus cookie resetPasswordToken
+      parameters:
+        - in: path
+          name: user_email
+          schema:
+            type: string
+          required: true
+
+      requestBody:
+        content:
+          application/json:
+            example:
+              'resetPasswordToken': 'gycyvhbjjinkknhvhfffj'
+              'password': 'irfanirfan123'
+              'confPassword': 'irfanirfan123'
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+
+  /logout:
+    delete:
+      tags:
+        - user
+      summary: logout
+      description: |
+        - validation
+          - cookie
+            - verifikasi jwt
+        - hapus cookie refreshToken
+        - update user.refreshToken dgn null
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+
 components:
+  responses:
+    200:
+      description: OK
+
+    400:
+      description: INVALID
+      content:
+        application/json:
+          example:
+            - field required
+            - field required
+
+    500:
+      description: UNKNOWN ERRORS
+      content:
+        application/json:
+          example:
+            - server under maintenance
+            - server down
+
   schemas:
-    Product:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-          example: 1
-        name:
-          type: string
-          example: "produk 1"
-        price:
-          type: integer
-          format: int32
-          example: 20000
-        createdBy:
-          type: integer
-          format: int64
-          example: 2
-        updatedBy:
-          type: integer
-          format: int64
-          example: 2
-        createdAt:
-          type: integer
-          format: date-time
-          example: 2023-08-20
-        updatedAt:
-          type: integer
-          format: date-time
-          example: 2023-08-20
-          
     User:
       type: object
       properties:
@@ -435,56 +1522,291 @@ components:
           example: user
         refreshToken:
           type: string
-          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVtYWlsQGVtYWlsLmNvbSIsImlhdCI6MTUxNjIzOTAyMn0.UOQFRvx2JwT1PcDKqbfj9f_WN66Gs_giUMGv3bgVcE8"
+          example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVtYWlsQGVtYWlsLmNvbSIsImlhdCI6MTUxNjIzOTAyMn0.UOQFRvx2JwT1PcDKqbfj9f_WN66Gs_giUMGv3bgVcE8'
         resetPasswordToken:
           type: string
-          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVtYWlsQGVtYWlsLmNvbSIsImlhdCI6MTUxNjIzOTAyMn0.UOQFRvx2JwT1PcDKqbfj9f_WN66Gs_giUMGv3bgVcE8"
+          example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVtYWlsQGVtYWlsLmNvbSIsImlhdCI6MTUxNjIzOTAyMn0.UOQFRvx2JwT1PcDKqbfj9f_WN66Gs_giUMGv3bgVcE8'
         active:
           type: integer
           format: int32
           example: 0
         activationToken:
           type: string
-          example: "huji9u8y6t4r3e2w9vd6"
-  responses:
-    Success:
-      description: success
-      content:
-        application/json:
-          example:
-            message: "success"
-    Created:
-      description: created
-      content:
-        application/json:
-          example:
-            message: "created"
-    InvalidUrl:
-      description: invali url
-      content:
-        application/json:
-          example:
-            message: "invalid url"
-    NotFound:
-      description: not found
-      content:
-        application/json:
-          example:
-            message: "not found"
-    Forbidden:
-      description: forbidden
-      content:
-        application/json:
-          example:
-            message: "forbidden"
-    InvalidInput:
-      description: invalid input
-      content:
-        application/json:
-          example:
-            message:
-              - "field a required"
-              - "field b required"
+          example: 'huji9u8y6t4r3e2w9vd6'
+
+    InventoriBarang:
+      type: object
+      properties:
+        _id:
+          type: object
+          pattern: '^[a-fA-F0-9]{24}$'
+          example: '4e5r6t7y8u9ieeuyiuyghu7y'
+        nama:
+          type: string
+          example: 'huji9u8y6t4r3e2w9vd6'
+        jumlah:
+          type: integer
+          format: int32
+          example: 123
+        jenis:
+          type: string
+          example: 'huji9u8y6t4r3e2w9vd6'
+        nomor_seri:
+          type: string
+          example: 'huji9u8y6t4r3e2w9vd6'
+        createdBy:
+          type: string
+          example: 'huji9u8y6t4r3e2w9vd6'
+        updatedBy:
+          type: string
+          example: 'huji9u8y6t4r3e2w9vd6'
+        createdAt:
+          type: integer
+          format: date-time
+          example: 2023-08-20
+        updatedAt:
+          type: integer
+          format: date-time
+          example: 2023-08-20
+
+    LokasiPenyimpanan:
+      type: object
+      properties:
+        _id:
+          type: object
+          pattern: '^[a-fA-F0-9]{24}$'
+          example: '4e5r6t7y8u9ieeuyiuyghu7y'
+        id_inventaris_barang:
+          type: string
+          example: 'huji9u8y6t4r3e2w9vd6'
+        lokasi:
+          type: string
+          example: 'zona a'
+        jumlah:
+          type: integer
+          format: int32
+          example: 123
+        createdBy:
+          type: string
+          example: 'huji9u8y6t4r3e2w9vd6'
+        updatedBy:
+          type: string
+          example: 'huji9u8y6t4r3e2w9vd6'
+        createdAt:
+          type: integer
+          format: date-time
+          example: 2023-08-20
+        updatedAt:
+          type: integer
+          format: date-time
+          example: 2023-08-20
+
+    Pelanggan:
+      type: object
+      properties:
+        _id:
+          type: object
+          pattern: '^[a-fA-F0-9]{24}$'
+          example: '4e5r6t7y8u9ieeuyiuyghu7y'
+        nama:
+          type: string
+          example: 'Toko Sentosa'
+        alamat:
+          type: string
+          example: 'jl. merak no.2'
+        kontak:
+          type: string
+          example: '085545550355'
+        createdBy:
+          type: string
+          example: 'huji9u8y6t4r3e2w9vd6'
+        updatedBy:
+          type: string
+          example: 'huji9u8y6t4r3e2w9vd6'
+        createdAt:
+          type: integer
+          format: date-time
+          example: 2023-08-20
+        updatedAt:
+          type: integer
+          format: date-time
+          example: 2023-08-20
+
+    Pemasok:
+      type: object
+      properties:
+        _id:
+          type: object
+          pattern: '^[a-fA-F0-9]{24}$'
+          example: '4e5r6t7y8u9ieeuyiuyghu7y'
+        nama:
+          type: string
+          example: 'Toko Abadi Jaya'
+        alamat:
+          type: string
+          example: 'jl. merpati no.11'
+        kontak:
+          type: string
+          example: '085545550355'
+        createdBy:
+          type: string
+          example: 'huji9u8y6t4r3e2w9vd6'
+        updatedBy:
+          type: string
+          example: 'huji9u8y6t4r3e2w9vd6'
+        createdAt:
+          type: integer
+          format: date-time
+          example: 2023-08-20
+        updatedAt:
+          type: integer
+          format: date-time
+          example: 2023-08-20
+
+    PenerimaanBarang:
+      type: object
+      properties:
+        _id:
+          type: object
+          pattern: '^[a-fA-F0-9]{24}$'
+          example: '4e5r6t7y8u9ieeuyiuyghu7y'
+        id_inventaris_barang:
+          type: string
+          example: 'huji9u8y6t4r3e2w9vd6'
+        jumlah:
+          type: integer
+          format: int32
+          example: 123
+        tanggal:
+          type: integer
+          format: date-time
+          example: 2023-08-20
+        id_pemasok:
+          type: string
+          example: 'huji9u8y6t4r3e2w9vd6'
+        createdBy:
+          type: string
+          example: 'huji9u8y6t4r3e2w9vd6'
+        updatedBy:
+          type: string
+          example: 'huji9u8y6t4r3e2w9vd6'
+        createdAt:
+          type: integer
+          format: date-time
+          example: 2023-08-20
+        updatedAt:
+          type: integer
+          format: date-time
+          example: 2023-08-20
+
+    PengirimanBarang:
+      type: object
+      properties:
+        _id:
+          type: object
+          pattern: '^[a-fA-F0-9]{24}$'
+          example: '4e5r6t7y8u9ieeuyiuyghu7y'
+        id_inventaris_barang:
+          type: string
+          example: 'huji9u8y6t4r3e2w9vd6'
+        jumlah:
+          type: integer
+          format: int32
+          example: 123
+        tanggal:
+          type: integer
+          format: date-time
+          example: 2023-08-20
+        id_pelanggan:
+          type: string
+          example: 'huji9u8y6t4r3e2w9vd6'
+        createdBy:
+          type: string
+          example: 'huji9u8y6t4r3e2w9vd6'
+        updatedBy:
+          type: string
+          example: 'huji9u8y6t4r3e2w9vd6'
+        createdAt:
+          type: integer
+          format: date-time
+          example: 2023-08-20
+        updatedAt:
+          type: integer
+          format: date-time
+          example: 2023-08-20
+
+    PergeseranBarang:
+      type: object
+      properties:
+        _id:
+          type: object
+          pattern: '^[a-fA-F0-9]{24}$'
+          example: '4e5r6t7y8u9ieeuyiuyghu7y'
+        id_inventaris_barang:
+          type: string
+          example: 'huji9u8y6t4r3e2w9vd6'
+        jumlah:
+          type: integer
+          format: int32
+          example: 123
+        tanggal:
+          type: integer
+          format: date-time
+          example: 2023-08-20
+        lokasi_awal:
+          type: string
+          example: 'zona a'
+        lokasi_akhir:
+          type: string
+          example: 'zona b'
+        createdBy:
+          type: string
+          example: 'huji9u8y6t4r3e2w9vd6'
+        updatedBy:
+          type: string
+          example: 'huji9u8y6t4r3e2w9vd6'
+        createdAt:
+          type: integer
+          format: date-time
+          example: 2023-08-20
+        updatedAt:
+          type: integer
+          format: date-time
+          example: 2023-08-20
+
+    StokBarang:
+      type: object
+      properties:
+        _id:
+          type: object
+          pattern: '^[a-fA-F0-9]{24}$'
+          example: '4e5r6t7y8u9ieeuyiuyghu7y'
+        id_inventaris_barang:
+          type: string
+          example: 'huji9u8y6t4r3e2w9vd6'
+        minimal:
+          type: integer
+          format: int32
+          example: 5
+        maksimal:
+          type: integer
+          format: int32
+          example: 5000
+        createdBy:
+          type: string
+          example: 'huji9u8y6t4r3e2w9vd6'
+        updatedBy:
+          type: string
+          example: 'huji9u8y6t4r3e2w9vd6'
+        createdAt:
+          type: integer
+          format: date-time
+          example: 2023-08-20
+        updatedAt:
+          type: integer
+          format: date-time
+          example: 2023-08-20
+
   securitySchemes:
     bearerAuth:
       type: http

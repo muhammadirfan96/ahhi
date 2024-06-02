@@ -193,6 +193,9 @@ const pergeseranBarang = async (req, res, next) => {
   }
 };
 
+// updateBarang
+
+
 export {
   penerimaanBarang,
   penambahanBarang,
