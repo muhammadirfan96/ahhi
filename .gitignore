@@ -1,11 +1,11 @@
 # Node.js
-node_modules/
+
 
 # Logs
 logs
 *.log
 npm-debug.log*
-
+7
 # Runtime data
 pids
 *.pid
@@ -29,7 +29,7 @@ yarn-error.log
 yarn.lock
 
 # dotenv environment variables file
-.env
+
 
 # VSCode directories
 .vscode/
